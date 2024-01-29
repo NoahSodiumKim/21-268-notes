@@ -1,0 +1,283 @@
+% fluffy.sty
+% Victoria Li // vli3@andrew.cmu.edu
+
+% References: 
+% https://www.dropbox.com/sh/poa3xrp198dn12v/AAB_7u22K5IT15K2G_Ie-qlea?dl=0&preview=MT.sty
+% https://github.com/Genius3435/LaTeX-Style/blob/main/ritwin.sty
+% https://github.com/unity858/sundry/blob/main/latex/second%20sty/seto.cls
+
+\ProvidesPackage{../fluffy_full}
+
+% Packages:
+\usepackage[top=0.75in]{geometry}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{tikz-cd}
+\usepackage{adjustbox}
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage{thmtools}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\tcbset{skin=enhanced}
+\usepackage{ifthen}
+\usepackage{etoolbox}
+\graphicspath{ {./img/} }
+% who the heck made quotes weird in latex
+\usepackage [autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+
+% for bold + smallcapps font...?
+\usepackage{fix-cm}
+\usepackage[T1]{fontenc} % To switch to the T1 encoding
+\usepackage{lmodern} % To switch to Latin Modern
+\rmfamily % To load Latin Modern Roman and enable the following NFSS declarations.
+% Declare that Latin Modern Roman (lmr) should take
+% its bold (b) and bold extended (bx) weight, and small capital (sc) shape, 
+% from the corresponding Computer Modern Roman (cmr) font, for the T1 font encoding.
+\DeclareFontShape{T1}{lmr}{b}{sc}{<->ssub*cmr/bx/sc}{}
+\DeclareFontShape{T1}{lmr}{bx}{sc}{<->ssub*cmr/bx/sc}{}
+
+% Formatting:
+\newcommand{\fhead}[1]{\begin{center}\course \\\prof \\\room \\#1\end{center}\vspace{2mm}}
+
+\newcommand{\ahead}{\begin{center}
+\ifdef{\atitle}{\textsc{\textbf{\begin{Large}\atitle\end{Large} \vspace{0.1cm}}} \\}{} 
+\ifdef{\acourse}{\textsc{\acourse} \\}{}
+\ifdef{\aprof}{\textsc{\aprof} \\}{}
+\ifdef{\aauthor}{\textsc{\aauthor} \\}{}
+\ifdef{\adate}{\textsc{\adate}}{} \end{center}\vspace{5mm}}
+
+% Math
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\T}{\mathcal{T}}
+% \newcommand{\iff}{\Longleftrightarrow}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\dg}{^\circ}
+\newcommand{\res}{\upharpoonright}
+% \newcommand{\bf}{\mathbf}
+
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\s}[1]{\mathcal{{#1}}}
+\newcommand{\ang}[1]{\left\langle #1 \right\rangle}
+\newcommand{\ip}[1]{\left\langle #1 \right\rangle}
+\newcommand{\inv}{^{-1}}
+\newcommand{\bm}[1]{\begin{bmatrix} #1 \end{bmatrix}}
+% https://tex.stackexchange.com/questions/22252/how-to-typeset-function-restrictions
+\newcommand\restr[2]{{% we make the whole thing an ordinary symbol
+  \left%.\kern-\nulldelimiterspace % automatically resize the bar with \right
+  #1 % the function
+  \littletaller % pretend it's a little taller at normal size
+  \right|_{#2} % this is the delimiter
+  }}
+
+
+\DeclareMathOperator{\cis}{cis}
+\DeclareMathOperator*{\lcm}{lcm}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\rk}{rk}
+\DeclareMathOperator{\Span}{span}	
+\DeclareMathOperator{\id}{id}
+% \DeclareMathOperator{\dim}{dim}
+% \DeclareMathOperator{\ker}{ker}
+\DeclareMathOperator{\im}{im}
+% \DeclareMathOperator{\hom}{hom}
+% \DeclareMathOperator{\span}{span}
+\DeclareMathOperator{\Null}{null}
+\DeclareMathOperator{\nll}{null}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\proj}{proj}
+
+% Integrals: dx
+\renewcommand{\d}[1]{\mathop{\mathrm{d}{#1}}}
+
+
+
+% Class options:
+\newif\ifmt
+\mtfalse
+\DeclareOption{mt}{\mttrue}
+\ProcessOptions\relax
+
+% Environment styles:
+% MT (https://www.dropbox.com/sh/poa3xrp198dn12v/AAB_7u22K5IT15K2G_Ie-qlea?dl=0&preview=MT.sty)
+\ifmt
+\definecolor{defgreen}{HTML}{90C4C4}
+\definecolor{propblue}{HTML}{38A4DC}
+\definecolor{lemcolor}{HTML}{824670}
+\definecolor{corcolor}{HTML}{17C3B2}
+
+\newcounter{prop}
+\numberwithin{prop}{section}
+\newcounter{thm}
+\numberwithin{thm}{section}
+\newcounter{lem}
+\numberwithin{lem}{section}
+\newcounter{cor}
+\numberwithin{cor}{section}
+\newcounter{def}
+\numberwithin{def}{section}
+\newcounter{prob}
+\numberwithin{prob}{section}
+\newcounter{rmk}
+\numberwithin{rmk}{section}
+
+\newenvironment{proposition}[1][]{\begin{tcolorbox}[boxrule=1.5pt, colback=propblue!10, colframe=propblue!80, adjusted title=\textbf{Proposition \refstepcounter{prop}\theprop} \ifthenelse{\equal{#1}{}}{}{(#1)}, sharp corners, left=8pt, right=8pt]}{\end{tcolorbox}}
+\newenvironment{theorem}[1][]{\begin{tcolorbox}[boxrule=1.5pt, colback=red!10, colframe=red!50, adjusted title=\textbf{Theorem \refstepcounter{thm}\thethm} \ifthenelse{\equal{#1}{}}{}{(#1)}, sharp corners, left=8pt, right=8pt]}{\end{tcolorbox}}
+\newenvironment{lemma}[1][]{\begin{tcolorbox}[boxrule=1.5pt, colback=lemcolor!10, colframe=lemcolor!80, adjusted title=\textbf{Lemma \refstepcounter{lem}\thelem} \ifthenelse{\equal{#1}{}}{}{(#1)}, sharp corners, left=8pt, right=8pt]}{\end{tcolorbox}}
+\newenvironment{corollary}[1][]{\begin{tcolorbox}[boxrule=1.5pt, colback=corcolor!10, colframe=corcolor!80, adjusted title=\textbf{Corollary \refstepcounter{cor}\thecor} \ifthenelse{\equal{#1}{}}{}{(#1)}, sharp corners, left=8pt, right=8pt]}{\end{tcolorbox}}
+\renewenvironment{proof}[1][\textbf{Proof}]{\begin{tcolorbox}[enhanced standard, coltitle=black, frame style={color=gray!10, line width=1.5pt, draw=gray!40}, colback=white, adjusted title=#1, sharp corners, left=8pt, right=8pt, breakable=true]}{\end{tcolorbox}}
+\newenvironment{solution}[1][\textbf{Solution}]{\begin{tcolorbox}[enhanced standard, coltitle=black, frame style={color=gray!10, line width=1.5pt, draw=gray!40}, colback=white, adjusted title=#1, sharp corners, left=8pt, right=8pt, breakable=true]}{\end{tcolorbox}}
+\newenvironment{definition}[1][]{\begin{tcolorbox}[boxrule=1.5pt, colback=defgreen!10, colframe=defgreen!80, adjusted title=\textbf{Definition \refstepcounter{def}\thedef} \ifthenelse{\equal{#1}{}}{}{(#1)}, sharp corners, left=8pt, right=8pt]}{\end{tcolorbox}}
+\newenvironment{problem}[1][]{\begin{tcolorbox}[boxrule=1.5pt, colback=magenta!10, colframe=magenta!40, adjusted title=\textbf{Problem \refstepcounter{prob}\theprob} \ifthenelse{\equal{#1}{}}{}{(#1)}, sharp corners, left=8pt, right=8pt]}{\end{tcolorbox}}
+\newenvironment{remark}[1][\textbf{Remark}]{\begin{tcolorbox}[enhanced, coltitle=black, frame code={\path[draw=black, line width=2pt]
+	([yshift=-4.5pt]frame.north west) -- ([yshift=10pt]frame.south west);}, colback=white, adjusted title=#1, left=8pt, right=8pt, breakable=true]}{\end{tcolorbox}}
+\newenvironment{example}[1][\textbf{Example}]{\begin{tcolorbox}[enhanced, coltitle=black, frame code={\path[draw=black, line width=2pt]
+	([yshift=-4.5pt]frame.north west) -- ([yshift=10pt]frame.south west);}, colback=white, adjusted title=#1, left=8pt, right=8pt, breakable=true]}{\end{tcolorbox}}
+
+
+% Default
+\else 
+\definecolor{defcolor}{HTML}{33658A}
+\definecolor{thmcolor}{HTML}{F96F5D}
+\definecolor{lemcolor}{HTML}{ffae42}
+\definecolor{remcolor}{HTML}{000000}
+\definecolor{propcolor}{HTML}{000000}
+\definecolor{quescolor}{HTML}{50808E}
+\definecolor{excolor}{HTML}{5E5768}
+\definecolor{corcolor}{HTML}{03CEA4}
+
+
+\mdfdefinestyle{thmbox} {
+	linewidth=1pt, skipabove=8pt,
+	rightline=false, leftline=true,
+	topline=false, bottomline=false,
+	linecolor=thmcolor, nobreak=false
+}
+\mdfdefinestyle{lembox} {
+	linewidth=1pt, skipabove=8pt,
+	rightline=false, leftline=true,
+	topline=false, bottomline=false,
+	linecolor=lemcolor, nobreak=false
+}
+\mdfdefinestyle{defbox} {
+	linewidth=1pt, skipabove=8pt,
+	rightline=false, leftline=true,
+	topline=false, bottomline=false,
+	linecolor=defcolor, nobreak=false,
+}
+\mdfdefinestyle{rembox} {
+	linewidth=1pt, skipabove=8pt,
+	rightline=false, leftline=true,
+	topline=false, bottomline=false,
+	linecolor=remcolor, nobreak=false,
+}
+\mdfdefinestyle{propbox} {
+	linewidth=1pt, skipabove=8pt,
+	rightline=false, leftline=true,
+	topline=false, bottomline=false,
+	linecolor=propcolor, nobreak=false,
+}
+\mdfdefinestyle{quesbox} {
+	linewidth=1pt, skipabove=8pt,
+	rightline=false, leftline=true,
+	topline=false, bottomline=false,
+	linecolor=quescolor, nobreak=false,
+}
+\mdfdefinestyle{exbox} {
+	linewidth=1pt, skipabove=8pt,
+	rightline=false, leftline=true,
+	topline=false, bottomline=false,
+	linecolor=excolor, nobreak=false,
+}
+\mdfdefinestyle{corbox} {
+	linewidth=1pt, skipabove=8pt,
+	rightline=false, leftline=true,
+	topline=false, bottomline=false,
+	linecolor=corcolor, nobreak=false,
+}
+
+
+\declaretheoremstyle[
+	headfont=\sffamily\bfseries\color{thmcolor},
+	notefont=\sffamily\bfseries\color{thmcolor},
+	spaceabove=2pt, spacebelow=1pt,
+	mdframed={style=thmbox}, headpunct={. },
+]{thmstyle}
+\declaretheoremstyle[
+	headfont=\sffamily\bfseries\color{lemcolor},
+	notefont=\sffamily\bfseries\color{lemcolor},
+	spaceabove=2pt, spacebelow=1pt,
+	mdframed={style=lembox}, headpunct={. },
+]{lemstyle}
+\declaretheoremstyle[
+	headfont=\sffamily\bfseries\color{defcolor},
+	notefont=\sffamily\bfseries\color{defcolor},
+	spaceabove=2pt, spacebelow=1pt,
+	mdframed={style=defbox}, headpunct={. },
+]{defstyle}
+\declaretheoremstyle[
+	headfont=\sffamily\bfseries\color{remcolor},
+	notefont=\sffamily\bfseries\color{remcolor},
+	spaceabove=2pt, spacebelow=1pt,
+	mdframed={style=rembox}, headpunct={. },
+]{remstyle}
+\declaretheoremstyle[
+	headfont=\sffamily\bfseries\color{propcolor},
+	notefont=\sffamily\bfseries\color{propcolor},
+	spaceabove=2pt, spacebelow=1pt,
+	mdframed={style=propbox}, headpunct={. },
+]{propstyle}
+\declaretheoremstyle[
+	headfont=\sffamily\bfseries\color{quescolor},
+	notefont=\sffamily\bfseries\color{quescolor},
+	spaceabove=2pt, spacebelow=1pt,
+	mdframed={style=quesbox}, headpunct={. },
+]{quesstyle}
+\declaretheoremstyle[
+	headfont=\sffamily\bfseries\color{excolor},
+	notefont=\sffamily\bfseries\color{excolor},
+	spaceabove=2pt, spacebelow=1pt,
+	mdframed={style=exbox}, headpunct={. },
+]{exstyle}
+\declaretheoremstyle[
+	headfont=\sffamily\bfseries\color{corcolor},
+	notefont=\sffamily\bfseries\color{corcolor},
+	spaceabove=2pt, spacebelow=1pt,
+	mdframed={style=corbox}, headpunct={. },
+]{corstyle}
+\declaretheoremstyle[
+	headfont=\itshape, spaceabove=2pt,
+	spacebelow=1pt, headpunct={. },
+	qed=$\square$,
+]{solstyle}
+
+\declaretheorem[style=thmstyle, name=Theorem, numbered=yes, numberwithin=section]{theorem}
+\declaretheorem[style=lemstyle, name=Lemma, numbered=yes, numberlike=theorem]{lemma}
+\declaretheorem[style=defstyle, name=Definition, numbered=yes, numberlike=theorem]{definition}
+% \declaretheorem[style=remstyle, name=Remark, numbered=yes, numberlike=theorem]{remark}
+\declaretheorem[style=plain, name=Remark, numbered=no]{remark}
+\declaretheorem[style=quesstyle, name=Question, numbered=no]{question}
+\declaretheorem[style=exstyle, name=Example, numbered=yes, numberlike=theorem]{example}
+\declaretheorem[style=propstyle, name=Proposition, numbered=yes, numberlike=example]{proposition}
+\declaretheorem[style=corstyle, name=Corollary, numbered=yes, numberlike=theorem]{corollary}
+\declaretheorem[style=solstyle, name=Solution, numbered=no]{solution}
+\declaretheorem[style=definition, name=Exercise, numbered=yes, numberwithin=section]{exercise}
+\declaretheorem[style=definition, name=Problem, numbered=yes, numberwithin=section]{problem}
+\fi

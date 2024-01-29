@@ -1,0 +1,504 @@
+\documentclass[11pt]{article}
+% \usepackage[mt]{fluffy}
+\usepackage{fluffy_full}
+\usepackage{enumitem}
+\newcommand{\atitle}{\textbf{21-268 Class Notes}}
+\newcommand{\aprof}{Noah Kim}
+\newcommand{\adate}{January 29th, 2024}
+\newcommand{\x}{\vec{x}}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\y}{\vec{y}}
+\newcommand{\z}{\vec{z}}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\sse}{\subseteq}
+\newcommand{\e}{\varepsilon}
+\begin{document}
+
+\ahead
+% \thispagestyle{empty}
+
+
+\section{The Euclidean Space}
+
+\vspace{2mm}
+
+\begin{definition}
+    $\R^n$ is the space of all "$n$-tuples" (or vectors) $(x_1, \cdots, x_n)$ of real numbers. i.e. $x_i \in \R$ for each $1 \leq i \leq n$. 
+\end{definition}
+
+\begin{definition}
+    \[\x + \y = (\x_1 + \y_1, \cdots, \x_n + \y_n)\]
+    \[t\x = (t\x_1, \cdots, t\x_n)\]
+\end{definition}
+
+\begin{example}
+    $\vec{0} = (0, \cdots, 0)$ with $n$ zeros. 
+\end{example}
+
+\begin{theorem}
+    Given $\x, \y, \z \in \R^n$, the following properties hold: 
+    \begin{enumerate}[label = (\roman*)]
+        \item (Positivity) $\x \cdot \x \geq 0$; also $\x \cdot \x = 0 \iff \x = \vec{0}$. 
+        \item (Symmetry) $\x \cdot \y = \y \cdot \x$
+        \item (Bilinearity) $(s\x + t\y)\cdot \z = s(\x\cdot\z) + t(\y\cdot\z)$. 
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof} 
+    \begin{enumerate}[label = (\roman*)]
+        \item First, \[\x \cdot \x = x_1^2 + \cdots + x_n^2 \geq 0\] since each $x_i^2 \geq 0$ and the sum of non-negative numbers i non-negative. Second, suppose $\x \cdot \x = 0$. Since the only way for $n$ non-negative numberes to sum to 0 is if they're each 0, $x_i^2 = 0$ for each $1 \leq i \leq n$. Thus $x_i = 0$. Conversely, if $\x = \vec{0}$, then $\x \cdot \x = 0^2 + \cdots + 0^2 = 0$. $\square$
+        \item By the definition of the dot product followed by the commutativity of multiplication, \[\x \cdot \y = \sum_{i=0}^{n} x_iy_i = \sum_{i=0}^{n} y_ix_i = \y \cdot \x\] $\therefore \x \cdot \y = \y \cdot \x. \ \square$
+        \item We do some computation. 
+        \begin{align}
+            (s\x + t\y)\cdot \z &= (sx_1 + ty_1, \cdots, sx_n+ty_n) \cdot (z_1, \cdots, z_n) \\
+            &= (sx_1 + ty_1)z_1 + \cdots (sx_n + ty_n)z_n \\
+            &= sx_1z_1 + \cdots + sx_nz_n + ty_1z_1 + \cdots ty_nz_n \\
+            &= s(x_1z_1 + \cdots x_nz_n) + t(y_1z_1 + \cdots y_nz_n) \\
+            &= s(\x\cdot\z) + t(\y\cdot\z)
+        \end{align}
+        
+    \end{enumerate}
+\end{proof}
+
+\begin{definition}
+    A function $f:\R^n \times \R^n \rightarrow \R$ that satisfies i) - iii) of the above theorem is called an \textit{inner product} in $\R^n$. 
+\end{definition}
+\begin{remark}
+    Inner products can also be defined on general vector spaces.
+\end{remark}
+
+\begin{example}
+    Let $x_1, \cdots, x_n \in \R$. We have an inner product in the polynomial vector space by defining, for polynomials $q$ and $p$ with degree equal to or less than $n$,
+    \[f(p,q) = \sum_{i=1}^{n}p(x_i)q(x_i)\] 
+\end{example}
+\begin{example}
+    For a continuous vector space $\C_{[a,b]}$, the following are inner products: 
+    \[f(g,h) = \int_{a}^{b} g(x)h(x) dx \]
+    \[f(g,h) = \int_{a}^{b} g(x)h(x)w(x) dx \]
+    where $w(x)$ is bounded, piecewise continuous, and $w > 0$ everywhere on $[a,b]$. 
+\end{example}
+\begin{definition}
+    The Euclidean norm of $\x \in \R^n$ is \[\norm{\x} = \sqrt{\x \cdot \x} = \sqrt{x_1^2 + \cdots + x_n^2}\]
+\end{definition}
+
+\begin{theorem}[Cauchy-Schwarz] 
+    For every $\x, \y \in \R^n$, \[|\x \cdot \y | \leq \norm{\x}\norm{\y}\]
+\end{theorem}
+
+\begin{proof}
+    We case on whether $\norm{\y} = 0$ or $\norm{\y} \neq 0$. \vspace{3mm}
+    Suppose $\norm{y} = 0$. Computing $\x \cdot \y$ gives you zero. Computing $\norm{\x}\norm{\y}$ also gives you zero, as desired. \vspace{3mm}
+    Otherwise, suppose that $\norm{\y} \neq 0$. We introduce an auxiliary scalar $t$ and choose a suitable value for $t$ later. By the definition of dot product, \begin{align}
+        0 &\leq (\x + t\y) \cdot (\x + t\y) \\
+        &= \norm{\x}^2 + 2t\x\cdot\y + t^2\norm{\y}^2 \end{align}
+    Now, let 
+    \[t = \frac{-\x\cdot\y}{\norm{\y}^2}.\]
+    Note that this is well-defined since $\norm{\y} \neq 0$. By substitution, we have
+    \begin{align} 0 &\leq \norm{\x}^2 \frac{-2(\x\cdot\y)^2}{\norm{\y}^2} + \frac{(\x\cdot\y)^2}{\norm{\y}^4}\norm{\y}^2 \\ &= \norm{x}^2 - \frac{(\x\cdot\y)^2}{\norm{\y}^2}\end{align}
+    Rearranging this yields $(\x\cdot\y)^2 \leq \norm{\x}^2 \norm{\y}^2$, which implies
+    \[|\x \cdot \y| \leq \norm{\x}\norm{\y}\]
+\end{proof}
+\begin{theorem}
+    If $\x,\y \in \R^n$ and $t \in \R$, then \begin{enumerate}
+        \item $\norm{\x} \geq 0$ and $\norm{\x} = 0 \iff \x = \vec{0}$. 
+        \item $\norm{t\x} = |t|\norm{\x}$
+        \item $\norm{\x + \y} \leq \norm{\x} + \norm{\y}$ \end{enumerate}
+\end{theorem}
+\begin{proof}
+    Left as an exercise for the reader.
+\end{proof}
+
+\begin{remark}
+    A function satisfying the above three properties is known as a norm and can be defined on a general vector space
+\end{remark}
+\begin{example}
+    Some other examples of norms in $\R^n$: \begin{itemize}
+        \item $\norm{\x}_{\ell \infty} := \max\{|x_1|, \cdots, |x_n|\}$
+        \item $\norm{\x}_{\ell^1} := |x_1| + \cdots + |x_n|$
+        \item $\norm{\x}_{\ell^p} := (|x_1|^p + \cdots + |x_n|^p)^\frac{1}{p}$ \end{itemize}
+    \end{example}
+
+\section{Topological Properties of Euclidean Space}
+
+\begin{definition}
+    Given $\x_0 \in \R^n$ and $r> 0$, then the \textit{ball} centered at $x_0$ of radius $r$ is \[B(\x_0,r) = \{x \in \R^n: \norm{\x - \x_0 } < r\}.\]
+\end{definition}
+
+\begin{remark}
+    Note that the ball doesn't include the "boundary" and it's sometimes called an "open" ball.
+\end{remark}
+
+\begin{definition}
+    Given a set $E \subseteq \R^n$, a point $\x \in E$ is called an \textit{interior point} of $E$ if there exists $r > 0$ such that $B(\x,r) \subseteq E$. 
+\end{definition}
+
+\begin{definition}
+    The \textit{interior} of $E$ - denoted by $E^{\circ}$ - is the set of all interior points of $E$.
+\end{definition}
+\begin{definition}
+    A subset $U \subseteq \R^n$ is \textit{open} if every $\x \in U$ is an interior point of $U$. In other words, for every $\x \in U$ there exists $r > 0$ such that $B(\x, r) \subseteq U$. 
+\end{definition}
+
+\begin{example}
+    If $\x_0 \in \R^n$ and $r >0$ then $B(\x_0,r)$ is open. 
+    \begin{proof} 
+        Fix $\y \in B(\x_0, r)$. We need to find $s$ such that \[B(\y,s) \subseteq B(\x_0,r).\]
+        Set $s = r - \norm{\x_0 - \y}$. Then, if $x \in B(\y, s)$, we have \begin{align} \norm{\x - \x_0} &= \norm{\x - \y + \y - \x_0} \\ &\leq \norm{\x - \y} + \norm{\y - \x_0} \\ &< s+ r - s \\ &= r. \end{align}
+        Thus, $\norm{\x - \x_0} < r$ and so $x \in B(\x_0, r)$. 
+    \end{proof}
+    \begin{remark}
+        To see where $s = r - \norm{\x_0 - \y}$ comes from, draw a picture. 
+    \end{remark}
+\end{example}
+
+\begin{example}
+    Here are some examples concerning open sets:
+    \begin{enumerate}
+        \item $(a,\infty)$ is open. \begin{proof}
+            If $x \in (a, \infty)$, one can check that $B(x, x-a) \subseteq (a,\infty)$.
+        \end{proof}
+        \item $(a,b)$ is open. 
+        \begin{proof}
+            Note that $(a,b) = B(\frac{a+b}{2}, \frac{b-a}{2})$. Using the fact that a ball is an open set, $(a,b)$ is open. 
+        \end{proof}
+        \begin{corollary}
+            $[a,b]^{\circ} = (a,b)$
+        \end{corollary}
+        \item $(a,b]$ is not open. 
+        \begin{proof}
+            $B(b,r)$ is not a subset of $(a,b]$ for any $r > 0$ since it contains elements larger than $b$. 
+        \end{proof}
+        \item Any union of open sets is open. That is, if $U_i$ are all open $i \in I$ then $U = \bigcup_{i \in I} U_i$ is open. 
+        \begin{proof}
+            If $\x \in U$ then $x \in U_i$ for some $i$. So there exists $B(\x, r) \subseteq U_i$ for some $r > 0$. Since $U_i \subseteq U$ and $B(\x,r) \subseteq U_i$, then $B(\x,r) \subseteq U$. So $\x$ is an interior point of $U$. 
+        \end{proof}
+    \end{enumerate}
+\end{example}
+
+\begin{definition}
+    Given $E \subseteq \R^n$, a point $x \in \R^n$ is an \textit{accumulation point} of $E$ if for every $r > 0$, the ball $B(\x,r)$ contains at least one point of $E$ different from $\x$. Note that $\x$ may or may not be in $E$, so the membership of $\x$ is irrelevant.
+\end{definition}
+
+\begin{example}
+    $0$ is an accumulation point of \{$\frac{1}{n}$\}$_{n \in \N}$. 
+    \begin{proof}
+        It suffices to show that for every $r > 0$, the ball $B(0, r)$ contains a point in $E$. This is equivalent to showing that for all $r < 0$, there exists some $n \in \N$ such that $\frac{1}{n} < r$. It should be clear that we can always find some $n$ such that $n > \frac{1}{r}$, and therefore $0$ is an accumulation point. 
+    \end{proof}
+\end{example}
+\begin{remark}
+    An interior point of $E \subseteq \R^n$ is an accumulation point of $E$.
+\end{remark}
+\begin{example}
+    \[E^\circ \subseteq \text{acc} \ E\]
+    \begin{proof}
+        If $\x \in E^\circ$, then for some $r_0 > 0$, $B(\x, r_0) \subseteq E$. Now given $r > 0$, set $\y = \x + \frac{\min\{r, r_0\}}{2} (1, 0, \cdots, 0)$ \\
+        Then $\y \neq \x$ and \[\norm{\y - \x} = \norm{\x + \frac{\min\{r, r_0\}}{2}(1, 0, \cdots, 0) - \x }\]
+        \[= \norm{\frac{\min\{r, r_0\}}{2}(1, 0, \cdots, 0)}\]
+        \[= \frac{\min\{r, r_0\}}{2}\]
+        So in particular, $\y \in B(\x, r) \cap B(\x, r_0)$. Therefore $\y \in E$. 
+    \end{proof}
+\end{example}
+
+\begin{example}
+    \[E = \R / (\{0\} \cup \{ \frac{1}{n}: n \in \N \})\]
+    Show that $E$ is open. 
+    \begin{proof}
+        Recall that a union of open sets is open. Also, we showed that intevals $(a, b), (-\infty, a), (a, \infty)$ are all open. Now, \[E = (\infty, 0) \cup (1, \infty) \cup \bigcup_{n \in \N} (\frac{1}{n+1}, \frac{1}{n}).\]
+        So $E$ is a union of open intervals and thus open sets, which implies that $E$ is open. 
+    \end{proof}
+\end{example}
+
+\begin{definition}
+    If $E \subseteq \R^n$, $\x \in \R^n$ is called a \textit{boundary point} of $E$, $\x \in \partial E$, if, for every $r > 0$, $B(\x,r)$ contains at least one point in $E$ and at least one point not in $E$. 
+\end{definition}
+
+\begin{example}
+    \[\partial B(\x, r) = \{\y \in \R^n: \norm{\y-\x} = r\} \]
+\end{example}
+
+\begin{proposition}
+    $\partial E \cup E^\circ = \emptyset$
+    \begin{proof}
+        It suffices to show that if $\x \in E^\circ$ then it cannot belong to the boundary. Now if $x \in E^\circ$, then there exists $r > 0$ such that $B(\x, r) \subseteq E$. Since the ball is fully countained by $E$, $\x$ fails the definition of boundary for this radius because this ball can not contain any points in the complement of $E$. 
+    \end{proof}
+\end{proposition}
+
+\begin{example}
+    \[E = (\infty, 0) \cup (1, \infty) \cup \bigcup_{n \in \N} (\frac{1}{n+1}, \frac{1}{n})\]
+    Find $E^\circ, \text{acc} \ E, \partial E$. 
+    \begin{solution}
+        $E^\circ = E$. By definition, $E^\circ \subseteq E$. Now take $\x \in E$. Then $\x$ must belong to one of the open intervals. Note that open intervals are, well, open (lol) so there is some ball with $B(\x,r)$ and $r > 0$ contained in that interval. So $E \subseteq E^\circ$ and therefore $E^\circ = E$. \vspace{3mm}
+
+        $\text{acc} \ E = E$. We must show that $\R \subseteq \text{acc} \ E$. Split $\R = (\R / E) \cup E$ and show that $\R / E \subset \text{acc} \ E$, $E \subseteq \text{acc} \ E$. First, \[\R / E = \{0\} \cup \{\frac{1}{n}: n \in \N\}\]
+        In the case that $\x = 0$, take $\y = \frac{-r}{2} \in (-\infty, 0)$. $\y \in E$ and $\y \neq 0$, so it satisfies the definition of accumulation point for this $r$. \vspace{3mm} 
+
+        If $\x = \frac{1}{n}$, then we have the ball $B(\frac{1}{n}, r)$. If $r \geq \frac{1}{2}(\frac{1}{n}-\frac{1}{n+1})$, take $\y = \frac{1}{n}- \frac{1}{2}(\frac{1}{n}-\frac{1}{n+1}) \in  (\frac{1}{n+1}, \frac{1}{n}).$ Otherwise, take $\x-r$ and we're done. \vspace{3mm} 
+
+        $\partial E = \{0\} \cup \{\frac{1}{n}: n \in \N\}$. Take $\x \in \{0\} \cup \{\frac{1}{n}: n \in \N\}$ and $r > 0$. Then by the definition of $E$, $\x \not\in E$.But also, $\x \in \text{acc} \ E$ by the precious step, so I can find $\y \in B(\x,r)$ such that $\y \neq \x$ and $\y \in E$. So \[\{0\} \cup \{\frac{1}{n}: n \in \N\} \subseteq E.\]
+        To show the reverse inclusion, recall that $\partial E \cap E^\circ = \emptyset$, which implies that $\partial E \subseteq \{0\} \cup \{\frac{1}{n}: n \in \N\}$. Therefore by double containment $\partial E = \{0\} \cup \{\frac{1}{n}: n \in \N\}$. 
+
+    \end{solution}
+\end{example}
+
+\begin{definition}[Closed Sets] $C \subseteq \R^n$ is \textit{closed} if $R^n /C$ is open. 
+\end{definition}
+
+\begin{proposition}
+    $E$ is closed if and only if acc $E \subseteq E$. 
+    \begin{proof}
+        Suppose $E$ is closed. Then $\R^n /E$ is open and so given $\x \in R^n/E$, there is $r > 0$ such that \[B(\x,r) \subseteq \R^n/E.\]
+        So, $\x \not \in$ acc $E$ and thus \[\R^n / E \subseteq \R^n / \text{acc} \ E \] 
+        therefore acc $E \subseteq E$.  \newpage
+        Now for the other direction, assume acc $E \subseteq E$. So given any $\x \in \R^n / E$, $\x \not \in$ acc $E$. Therefore, for some $r > 0$, $B(\x, r) / \{\x\}$ does not contain any points of $E$. i.e.
+        \[B(\x,r)/ \{ \x \} \subseteq \R^n / E\]
+        since also $\x \in \R^N /E$. So therefore the whole ball doesn't belong to $E$ meaning that it belongs to the complement. 
+        \[B(\x, r) \subseteq \R^n / E\]
+        So $\R^n / E$ is open, which implies that $E$ is closed.
+    \end{proof}
+\end{proposition}
+
+\section{Functions}
+$f: E \ra \R^m$, where $E \subseteq R^n$. For every $x \in E$, $f(\x) \in R^m$. 
+\begin{definition}[Domain]
+    The domain of $f = E$ is the largest set on which $f$ is well-defined. i.e. no logs of negatives, division by $0$, etc.
+\end{definition}
+
+\begin{definition}[Bounded Sets]
+    $A \subseteq \R^n$ is bounded if $A \subseteq B(\x,r)$ for some $x \in \R^n$, $r > 0$.
+\end{definition}
+
+\begin{definition}[Images]
+    Given $F \subseteq E$, the image $f(F) = \{ \y \in \R^m : \y = f(\x)$ for some $x \in F \}$.
+\end{definition}
+
+\begin{definition}[Bounded Functions]
+    A function $f$ is bounded if $f(E)$ is a bounded subset of $\R^m$.
+\end{definition}
+
+\begin{definition}[Bounded Directions]
+    If $m = 1$ - that is, if the dimension of the image is $1$ - we can say that $f$ is bounded from above if $f(E) \subseteq (-\infty, a)$ where $a \in \R$ and similarly, we can define when a function is bounded from below.  
+\end{definition}
+
+\begin{definition}[Inverse Image]
+    Given $G \subseteq \R^m$, $f^{-1}(G) = \{ \x \in E: f(\x) \in G\}$. Note that this is not the inverse function, so be careful.
+\end{definition}
+
+\begin{definition}[Graphs]
+    A graph of $f$ is denoted as gr $f \subseteq \R^n \times \R^n = \{ (\x, f(\x)):\x \in E\}$.
+\end{definition}
+
+\begin{definition}[-jectivity]
+    When $f: E \ra F, E \sse \R^n, R \sse \R^m,$ f is said to be \begin{enumerate}
+        \item Injective if $\x \neq \z \implies f(\x) \neq f(\z)$.
+        \item Surjective if $f(E) = F$.
+        \item Bijective if it is both surjective and injective. If this is the case, then you can indeed define an inverse function $f^{-1} : F \ra E$ which assigns to every $\y \in F$ the unique $\x \in E$ such that $f(\x) = \y$.
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}[-creasing]
+    When $f: E \ra \R$ and $E \sse \R$, $f$ is 
+    \begin{enumerate}
+        \item increasing if $f(x) \leq f(y)$ whenever $x < y$
+        \item decreasing if $f(x) \geq f(y)$ whenever $x > y$.
+        \item strictly increasing if $f(x) < f(y)$ whenever $x < y$
+        \item strictly decreasing if $f(x) > f(y)$ whenever $x > y$.
+        \item \textit{monotone} if it is one of these 4. 
+    \end{enumerate}
+\end{definition}
+\section{Limits of Functions}
+\begin{definition}[Limit of $f(x)$]
+    Let $E \sse \R^n$, $f: E \ra \R^m$, $\x_0 \in$ acc $E$. We say $\y \in \R^m$ is the \textit{limit} of $f$ as $\x$ approahes $\x_0$ if: given $\e > 0$, there exists $\delta > 0$ (depending on $f$ and $\x_0, \e$) such that 
+    \[\norm{f(\x) - \y} < \e\]
+    for all $\x \in E$ with $0 < \norm{\x - \x_0} < \delta.$ \vspace{3mm}
+
+    We write $\displaystyle{\lim_{\x \ra \x_0} f(\x) = \y}$ or $f(\x) \ra \y$ as $\x \ra \x_0$. 
+
+\end{definition}
+
+\begin{remark}
+    Limits also sometimes do not exist. The proof strategy here is basically the following: you tell me how close you want $f(\x)$ to be to $\y$ and I tell you how close $\x$ has to be to $\x_0$. Basically, formulate a $\delta$ such that whatever you're showing has to be true. 
+\end{remark}
+
+There are some criteria for the nonexistence of $\displaystyle{\lim_{\x \ra \x_0} f(\x)}$. If $F \sse E$, let $f\upharpoonright F$ be the restriction of $f$ to $F$. If $F, G \sse E$ with $F \cap G = \emptyset$, $\x_0 \in$ acc $E \ \cap$ acc $G$ and such that  $\displaystyle{\lim_{\x \ra \x_0} f\upharpoonright F (\x) \neq \lim_{\x \ra \x_0} f\upharpoonright G (\x) }$ then $\displaystyle{\lim_{\x \ra \x_0} f(\x)}$ does not exist. 
+
+\begin{remark}
+    The limit of a constant function is that constant. (Thanks Sherlock)
+\end{remark}
+
+\begin{example}
+    \[f(x,y) = \begin{cases} 
+        1 & y = x^2 \ \& \ x \neq 0 \\
+        0 & \text{otherwise}
+     \end{cases}
+  \]
+    Take $F = \{(x,y): y = x^2\}$ and $G = \{(x,0): x \in \R\}$.
+    \[\lim_{(x,y) \ra (0,0)} f(x,y) \upharpoonright F = 1\]
+    \[\lim_{(x,y) \ra (0,0)} f(x,y) \upharpoonright G = 0\]
+    \[\therefore \lim_{(x,y) \ra (0,0)} f(x,y) \ \text{does not exist.}\]
+\end{example}
+\newpage
+\begin{example}
+    \[\lim_{(x,y) \ra (0,0)} \frac{x^2y}{x^2 + y^2}\]
+    \begin{solution}
+        Fix arbitrary $\e > 0$. Let $\delta = \e$. If $0 < \norm{(x,y) - (0,0)} < \delta = \e$, then 
+        \[\norm{\frac{x^2y}{x^2 + y^2} - 0} = \frac{x^2|y|}{x^2 + y^2}\]
+        \[\leq \frac{(x^2 + y^2) \sqrt{x^2 + y^2}}{x^2 + y^2}\]
+        \[ = \sqrt{x^2 + y^2}\]
+        \[\norm{(x,y)}\]
+        \[< \delta = \e\]
+    \end{solution}
+\end{example}
+
+At this point, you might be wondering how we made that choice of $\delta$. The idea is that you deal with funny inequalities. Here, once you have your inequality in terms of $\norm{(x,y)}$, you then choose your $\delta$ in terms of epsilon accordingly. More examples should illuminate these.
+
+\begin{example}
+    Compute and prove:
+    \[\lim_{(x,y) \ra (0,0)} \frac{x^my}{x^2 + y^2}. \ \ (m \in \N, m \geq 2) \]
+    \begin{solution}
+        We immediately suspect that the limit is $0$ because shoving in $y = 0$ yields $\frac{0}{x^2}$ where $x \neq 0$. Fix $\e > 0$. Now we do some scratch work to figure out what a good choice for $\delta$ should be. 
+        \[| \frac{x^my}{x^2 + y^2} | = \frac{|x^m| \sqrt{y^2}}{x^2+y^2}\]
+        \[ = \frac{(x^2)^\frac{m}{2} \sqrt{y^2}}{x^2 + y^2}\]
+        \[\leq \frac{\sqrt{x^2 + y^2}^\frac{m}{2} \sqrt{x^2 + y^2}}{x^2 + y^2}\]
+        \[= \sqrt{x^2 + y^2}^{m-1}\]
+        \[< \norm{(x,y) - (0,0)}\]
+        \[\leq \delta^{m-1}\]
+        \[< \delta \ \ \ \ (\delta < 1)\]
+        Now we realize that it's a good idea to let $\delta = \min\{1, \epsilon\}$. So we then have that 
+        \[\delta \leq \epsilon\]
+        which finishes the proof since then 
+        \[ \norm{(x,y) - (0,0)} < \epsilon\]
+        as desired.
+
+    \end{solution}
+\end{example}
+
+If given a limit, you have two options.
+\begin{itemize}
+    \item Prove that the limit exists
+    \item Prove it doesn't exist by finding $F$ and $G$ both subsets of the domain such that the limits along $F$ and $G$ disagree.
+\end{itemize}
+
+\begin{example}
+    \[\lim_{(x,y) \ra (0,0)} \frac{xy}{x^2 + y^2}\]
+    We should suspect by inspection that if the limit exists, it should be zero. But surely we should try $y = kx$. Then let
+    \[F = \{(x,y): x = y\} \]
+    \[G = \{(x,y): x = -y\}\]
+    Note that using these subsets yields constant functions. If $(x,y) \in F$, the limit is $\frac{1}{2}$. If $(x,y) \in G$, the limit is $\frac{-1}{2}$. Since the limits of constant functions are constants, 
+    \[\lim_{(x,y) \ra (0,0)} \frac{xy}{x^2 + y^2} = \frac{1}{2} \ \ ((x,y) \in F)\] 
+    \[\lim_{(x,y) \ra (0,0)} \frac{xy}{x^2 + y^2} = -\frac{1}{2} \ \ ((x,y) \in G)\] 
+    So then the limit doesn't exist because they don't agree.
+\end{example}
+
+\begin{example}
+    \[\lim_{(x,y) \ra (0,0)} \frac{x^{100}y}{x-y}\]
+    Note that the domain is all $(x,y) \in \R^2$ such that $x \neq y$. The idea here is that we try to use the fact that the denominator blows up to get the non-existence of the limit. Suppose \[F = \{(x,y): y=0\}.\] If the limit exists, it must be the case that it must be equal to $0$. Now produce a set $G$ such that the limit with the domain restricted to $G$ doesn't approach $0$. Say 
+    \[G = \{(x,y) : y = x + x^m\}.\]
+    We haven't chosen $m$ yet, but we're free to do that later. Then if $(x,y) \in G / \{(0,0)\}$, 
+    \[f(x,y) = \frac{x^{100}(x + x^{m})}{-x^m}\]
+    Let $m = 101$
+    \[ = \frac{x^{101}(1 + x^{100})}{-x^{101}}\]
+    \[ = -1 \ \text{as $x \ra 0.$}\]
+    So $\displaystyle{\lim_{(x,y) \ra (0,0)} f \upharpoonright G = -1}$. Then by our criteria for non-existence, the limit does not exist.
+\end{example}
+
+\begin{theorem}
+    Let $E \sse \R^n$ and $x_0 \in$ acc $E$. Suppose $f: E \ra \R^m$ and $g: E \ra \R^m$ satisfy \[\lim_{x \ra x_0} f(\x) = \ell_1\]
+    \[\lim_{x \ra x_0} g(\x) = \ell_2.\]
+    Then, \begin{enumerate}
+        \item $\displaystyle{\lim_{\x \ra \x_0} (f + g)(\x) = \ell_1 + \ell_2}$
+        \item $\displaystyle{\lim_{\x \ra \x_0} xf(\x) = c\ell_1}$
+        \item $\displaystyle{\lim_{\x \ra \x_0} (fg)(\x) = \ell_1\ell_2}$
+        \item If $m =1$ and $\ell_2 \neq 0$ and $g(\x) \neq 0$ for all $\x \in E$, then \[\lim_{x \ra x_0} \left(\frac{f}{g}\right) (\x) = \frac{\ell_1}{\ell_2}.\]
+
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}[(4)]
+    Fix $\e > 0$,
+    \[\left| \frac{f(x)}{g(x)} - \frac{\ell_1}{\ell_2} \right| = \left| \frac{f(x)\ell_2 - g(x)\ell_1}{g(x)\ell_2} \right|\]
+    \[ = \frac{|f(x)\ell_2 - \ell_1\ell_2 + \ell_1\ell_2 - g(x)\ell_1|}{|g(x)\ell_2|}\]
+    \[\leq \frac{|\ell_2||f(x) - \ell_1|}{|g(x)\ell_2|} + \frac{|\ell_1||\ell_2 - g(x)|}{|g(x)\ell_2|}\]
+    \[= \frac{|f(x) - \ell_1|}{|g(x)|} + \frac{|\ell_1||\ell_2 - g(x)|}{|g(x)\ell_2|}\]
+    Let $\delta_1$ be small enough so that for $0 < \norm{x - x_0} < \delta_1$, 
+    \[|g(x) - \ell_2| < \frac{|\ell_2|}{2}\]
+    \[\implies |g(x)| < \frac{|\ell_2|}{2}\]
+    \[\implies \frac{1}{|g(x)|} < \frac{2}{|\ell_2|}\]
+    Plugging this estimate into the above, we obtain
+    \[\left| \frac{f(x)}{g(x)} - \frac{\ell_1}{\ell_2} \right| \leq \frac{|f(x) - \ell_1|2}{|\ell_2|} + \frac{2|\ell_1|}{|\ell_2|^2}|\ell_2 - g(x)|\]
+    Then choose $\delta_2$ such that if $0 < \norm{x - x_0} < \delta_2$
+    \[|f(x) - \ell_1| < \frac{\varepsilon |\ell_2|}{4}\]
+    and $\delta_3$ such that if $0 < \norm{x-x_0} < \delta_3$ 
+    \[|\ell_2 - g(x) | < \frac{|\ell_2|^2}{4||\ell_1| + 1|}\varepsilon\]
+    Then if we choose $\delta = \min\{\delta_1, \delta_2, \delta_3\}$, plugging in the above inequalities gives us 
+    \[\left| \frac{f(x)}{g(x)} - \frac{\ell_1}{\ell_2} \right| < \epsilon \frac{|\ell_2}{4} \cdot \frac{2}{|\ell_2} + \frac{2|\ell_1|}{|\ell_2|^2}\cdot\frac{|\ell_2|^2 \varepsilon}{4||\ell_1| + 1|}\]
+    \[\leq \frac{\varepsilon}{2} + \frac{\varepsilon}{2}\]
+    \[= \varepsilon\]
+\end{proof}
+
+\begin{theorem}[Squeeze Theorem]
+    Let $E \sse \R^n$ and $x_0 \in $ acc $E$. Let $f, g, h$ be functions from $E$ to $\R$ such that 
+    \[\lim_{x \ra x_0} g(x) = \ell = \lim_{x \ra x_0}h(x)\]
+    and 
+    \[g(x) \leq f(x) \leq h(x)\]
+    for all $x \in E$. Then
+    \[\lim_{x \ra x_0}f(x) = \ell.\]
+\end{theorem}
+
+\begin{proof}
+    Fix $\varepsilon > 0$. Let $\delta_1$ and $\delta_2$ be small enough so that for all $|x_0-x| < \delta_1$, or $|x_0 - x | < \delta_2$, 
+    $|g(x) - \ell| < \varepsilon$, or $|h(x)-\ell| < \varepsilon$ respectively.
+    These inequalities imply that $g(x) > \ell - \varepsilon$ if $0 < |x - x_0 | < \delta_1$ and $h(x) < \ell+\varepsilon$ if $0 < |x - x_0 | < \delta_2$. Then,
+    \[\ell - \epsilon \leq g(x) \leq f(x) \leq h(x) \leq \ell + \varepsilon\]
+    if $0 < \norm{x - x_0} < \min\{\delta_1, \delta_2\}$. Thus \[|f(x) - \ell| < \varepsilon\]
+    if $0 < \norm{x - x_0} < \delta$. 
+\end{proof}
+
+\begin{theorem}
+    Let $E \sse \R^n$, $F \subseteq \R^m$, $x \in$ acc $E$, and $f: E \ra F$, $g: F \ra \R^p$ be functions such that \[\lim_{x \ra x_0} f(x) = \ell \in \R^m\]
+    \[\ell \in \text{acc } E\]
+    \[\lim_{y \ra \ell} g(y) = L \in \R^p\]
+    Assume that either 
+    \begin{enumerate}[label = (\roman*)]
+        \item $\exists \delta_1 > 0$ such that $f(x) \neq \ell$ for all $x \in E$ with $0 < \norm{x - x_0} < \delta_1$. or
+        \item $\ell \in F$ and $g(\ell) = L$.
+    \end{enumerate}
+    Then \[\lim_{x \ra x_0} g(f(x)) = L.\]
+    Proof left as an exercise for the reader (lol)
+\end{theorem}
+
+\begin{remark}
+    This is nice because we can use this to change variables and perform funny substitutions in limits. 
+\end{remark}
+
+\begin{example}
+    Compute:
+    \[\lim_{x \ra 0}\frac{\log{(1 + \sin{x})}}{x}.\]
+    \begin{solution}
+        Recall that $\lim_{x \ra 0}\frac{\sin{x}}{x} = 1$ and $\lim_{x \ra 0} \frac{\log(1 + x)}{x} = 1$.
+        We have that 
+        \[\lim_{x \ra 0}\frac{\log{(1 + \sin{x})}}{x} = \lim_{x \ra 0}\frac{\log{(1 + \sin{x})}}{\sin{x}}\cdot \frac{\sin{x}}{x}\]
+        Let $f(x) = \sin{x}$ and $g(y) = \frac{\log{(1 + y)}}{y}$. Let's check the assumptions from the above theorem.
+        \begin{enumerate}[label = (\roman*)]
+            \item $\displaystyle{\lim_{x \ra 0} f(x) = 0 = \ell}$
+            \item $0 \in$ acc$(F)$ = acc$((-1,0) \cup (0,1))$.
+            \item $\displaystyle{\lim_{y \ra 0}g(y) = 1 = L}$
+            \item For $|x - 0| < \frac{\pi}{2}, f(x) \neq 0$. 
+        \end{enumerate}
+        By the previous theorem, $\displaystyle{\lim_{x \ra 0} g(f(x)) = 1}$. Then you can use the limit product rule to show that \[\lim_{x \ra 0}\frac{\log{(1 + \sin{x})}}{\sin{x}}\cdot \frac{\sin{x}}{x} = 1 \cdot 1 = \boxed{1}\]
+    \end{solution}
+\end{example}
+\newpage
+\section{Continuity}
+\begin{definition}[Isolated Points]
+    Let $E \subseteq \R^n$. A point $x_0 \in E$ is called an isolated point of $E$ if there exists $\delta >0$ such that 
+    \[B(x_0,\delta) \cap E = \{x_0\}.\]
+    In other words, a point is isolated if you can create a ball that has $x_0$ as the only element of $E$ and elements in the complement of $E$.
+\end{definition}
+\begin{definition}[Continuous Functions]
+    Let $E \subseteq \R^n$ and $x_0 \in$ acc $E$. Given a function $f: E \ra \R^m$, we say $f$ is continuous at $x_0$ if for any $\varepsilon > 0$, there exists $\delta$ such that for all $x \in E$ with $\norm{x_0 - x} < 0$, 
+    \[\norm{f(x) - f(x_0)} < \varepsilon.\]
+    If $f$ is continuous at every point $x \in E$, then we say $f$ is continuous on $E$ and $f \in C(E)$ (or $f \in C^\circ(E)$). 
+\end{definition}
+
+
+\end{document}
