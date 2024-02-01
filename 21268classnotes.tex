@@ -500,5 +500,96 @@ If given a limit, you have two options.
     If $f$ is continuous at every point $x \in E$, then we say $f$ is continuous on $E$ and $f \in C(E)$ (or $f \in C^\circ(E)$). 
 \end{definition}
 
+\begin{theorem}
+    Let $E \subseteq \R^n$, $x_0 \in E$, $f: E \ra \R^m$. 
+    \begin{enumerate} [label = \roman*.)]
+        \item If $x_0$ is an isolated point of $E$, then $f$ is continuous at $x_0$. 
+        \item If $x_0$ is an accumulation point, then $f$ is continuous at $x_0$ iff $\displaystyle{\lim_{x \ra x_0} f(x) = f(x_0)}$
+    \end{enumerate}
+    \begin{proof}
+        i.) If $x_0 \in$ iso $E$, then there exists $\delta > 0$ such that $B(x_0, \delta) \cap E = \{x_0\}$. In particular, if $\norm{x - x_0} < \delta \ \& \ x \in E$, then $x = x_0$. To check continuity at $x_0$, fix $\varepsilon > 0$. Take our $\delta$ from above. Then \[\norm{x_0 - x} < \delta \ \& \ x \in E\]
+        \[\implies x = x_0\]
+        \[\implies \norm{f(x) - f(x_0)} = 0 < \varepsilon\]
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}
+    Let $E \subseteq \R^n$, $x_0 \in E$, $f: E \ra \R^m$, and $g: E \ra \R^m$ such that $f$ and $g$ are continuous at $x_0$. Then,
+    \begin{enumerate} [label = \roman*.)]
+        \item $f + g$, $cf$, $cg$, $f \cdot g$ are continuous at $x_0$. 
+        \item If $m = 1$, then $\frac{f}{g}$ (restricted to the set where $g(x) \neq 0$) is also continuous at $x_0$ if $g(x_0) \neq 0$. 
+    \end{enumerate}
+    \begin{proof}
+        Trivial and left as an exercise for the reader. 
+    \end{proof}
+\end{theorem}
+
+\begin{remark}
+    If $f: E \ra \R^m$ is given by \[f(x) = \begin{pmatrix}
+        f_1(x) \\
+        \vdots \\
+        f_m(x)
+    \end{pmatrix}\]
+    then $f$ is continuous at $x_0 \in E \iff f_i$ is continuous at $x_0$ for each $1 \leq i \leq m$. 
+\end{remark}
+
+\begin{theorem}
+    Let $E \subseteq \R^n$, $F \sse \R^m$, $x_0 \in E$, $f: E \ra F$, and $g: F \ra \R^p$ be such that $f$ is continuous at $f(x_0)$. Then $g \circ f: E \ra \R^p$ is continuous at $x_0$.
+\end{theorem}
+
+You have to be careful with continuity when taking inverses.
+\begin{example}
+    This is continuous on the whole domain.
+    \[f(x) = \begin{cases} 
+        x & 0 \leq x \leq 1 \\
+        x-1 & 2 < x \leq 3 
+     \end{cases}
+    \]
+    This isn't:
+    \[f^{-1}(x) = \begin{cases} 
+        x & 0 \leq x \leq 1 \\
+        x+1 & 2 < x \leq 3 
+     \end{cases}
+    \]
+    So if a function is continuous, it's not necessarily the case that its inverse is also continuous. See Leoni's notes for example where continuity of $f^{-1}$ is guaranteed. 
+\end{example} 
+\section{Directional Derivatives and Differentiability}
+\begin{definition}[Directional Derivative]
+    Let $E \sse \R^n, f: E \ra \R,$ and  $x_0 \in E$. Given a direction $v \in \R^n/\{0\}$, let $L$ be the line through $x_0$ in direction $v$.
+    \[L = \{x_0 + tv: t \in \R\}\]
+    Assume $x_0$ is an accumulation point of $(L \cap E)$. Then the directional derivative of $f$ at $x_0$ in direction $v$ is 
+    \[\frac{\partial f}{\partial v}(x_0) = \lim_{t \ra 0} \frac{f(x_0 + tv) - f(x_0)}{t}\]
+\end{definition}
+
+
+\begin{definition}[Partial derivatives in the coordinate directions]
+    With the same setup as the previous definition, $v = e_i$ (Google standard basis)
+    \[\frac{\partial f}{\partial e_i} (x_0) = \frac{\partial f}{\partial x_i} (x_0)= D_if(x)\]
+    is the partial derivative of $f$ with respect to $x_i$ at $x_0$. 
+\end{definition}
+
+\begin{example}
+    $E = \R$, $v = 1$
+    \[\frac{\partial f}{\partial 1}(x_0) = \lim_{t \ra 0}\frac{f(x_0 + 1\cdot t)-f(x_0)}{t}= f'(x_0)\] 
+\end{example}
+
+Recall on that on $\R$, if $f$ is differentiable at $x_0$, then $f$ is continuous at $x_0$. 
+\begin{example}
+    The existence of directional derivatives does not imply continuity. 
+    \[f(x,y) = 
+    \begin{cases}
+        \frac{x^2y}{x^4 + y^2} & \text{if} \ (x,y) \neq (0,0) \\
+        0 & \text{if} \ (x,y) = (0,0)
+    \end{cases}
+    \]
+    Can compute the directional derivatives:
+    \[v = (v_1, v_2)\]
+    \[\frac{\partial f}{\partial v} (0,0) = 
+    \begin{cases}
+        \frac{v_1^2}{v_2} & \text{if} \ v_2 = 0 \\
+        0 & \text{if} \ v_2 = 0
+    \end{cases} \]
+    Claim: $f$ is not continuous at $(0,0)$. 
+\end{example}
 
 \end{document}
