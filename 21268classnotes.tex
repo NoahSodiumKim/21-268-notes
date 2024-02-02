@@ -495,7 +495,7 @@ If given a limit, you have two options.
     In other words, a point is isolated if you can create a ball that has $x_0$ as the only element of $E$ and elements in the complement of $E$.
 \end{definition}
 \begin{definition}[Continuous Functions]
-    Let $E \subseteq \R^n$ and $x_0 \in$ acc $E$. Given a function $f: E \ra \R^m$, we say $f$ is continuous at $x_0$ if for any $\varepsilon > 0$, there exists $\delta$ such that for all $x \in E$ with $\norm{x_0 - x} < 0$, 
+    Let $E \subseteq \R^n$ and $x_0 \in$ acc $E$. Given a function $f: E \ra \R^m$, we say $f$ is continuous at $x_0$ if for any $\varepsilon > 0$, there exists $\delta$ such that for all $x \in E$ with $\norm{x_0 - x} < \delta$, 
     \[\norm{f(x) - f(x_0)} < \varepsilon.\]
     If $f$ is continuous at every point $x \in E$, then we say $f$ is continuous on $E$ and $f \in C(E)$ (or $f \in C^\circ(E)$). 
 \end{definition}
@@ -582,14 +582,68 @@ Recall on that on $\R$, if $f$ is differentiable at $x_0$, then $f$ is continuou
         0 & \text{if} \ (x,y) = (0,0)
     \end{cases}
     \]
-    Can compute the directional derivatives:
-    \[v = (v_1, v_2)\]
-    \[\frac{\partial f}{\partial v} (0,0) = 
+    Take a vector $v \in \R^2$, with $v_1^2 + v_2^2 = 1$. 
+    \[I_t := \frac{f(0 + tv) - f(0)}{t} = \frac{f(t(v_1, v_2))}{t} = \frac{\frac{(tv_1)^2 tv_2}{(tv_1)^4 + (tv_2)^2}}{t}\]
+    \[I_t = \frac{1}{t}(\frac{v_1^2v_2}{t^2v_1^4 + v_2^2})\]
+    If $v_2 \neq 0$, \[\lim_{t \ra 0} I_t = \frac{v_1^2v_2}{v_2^2} = \frac{\partial f}{\partial v} (0)\]
+    If $v_2 = 0$, then $I_t = 0$, which also implies that the directional derivative should be $0$. In sum: 
+
+    \[\frac{\partial f}{\partial v} (0,0)
     \begin{cases}
         \frac{v_1^2}{v_2} & \text{if} \ v_2 = 0 \\
         0 & \text{if} \ v_2 = 0
     \end{cases} \]
-    Claim: $f$ is not continuous at $(0,0)$. 
+    
+    All this tells us is that the directional derivative exists. So, is $f$ continuous at $(0,0)$? Differentiability is stronger than continuity in functions from $\R \ra \R$, but this isn't generally the case in higher-dimensional functions. Claim: $f$ is not continuous at $(0,0)$. 
+
+    \[f(x,x^2) = \frac{1}{2}\]
+    \[f(x,0) = 0\]
+    The limit at these paths are not equal, which implies discontinuity at $(0,0)$. 
+
 \end{example}
+
+\begin{remark}
+    If $f:\R \ra \R$, then directional differentiability implies continuity. Given the example above, the same doesn't hold for higher-dimensional functions. (Note the distinction between directional derivatives and the stronger notion of differentiability below.)
+\end{remark}
+
+\begin{definition}[Differentiability]
+    Let $E \subseteq \R^n$, $f: E \ra \R$, and $x_0 \in E$ an accumulation point of $E$. Then $f$ is differentiable at $x_0$ if there exists $\vec{b} \in \R^n$ depending on $x_0$ such that 
+    \[\lim_{x \ra x_0} \frac{f(x) - f(x_0) - \vec{b}\cdot (x-x_0)}{\norm{x-x_0}} = 0\]
+\end{definition}
+
+\begin{remark}
+    $T(x) = \vec{b} \cdot x$ is linear. 
+\end{remark}
+
+\begin{definition}[Differentials]
+    Say that $f$ as before is continuous at $x_0 \in E$, we call $df(x_0) \cdot v = \vec{b} \cdot v$ the differential of $f$ at $x_0$.
+\end{definition}
+
+\begin{theorem}
+    Let $E \subseteq \R^n$, $f: E \ra \R$, and $x_0 \in E$ an accumulation point of $E$. If $f$ is differentiable at $x_0$, then $f$ is continuous at $x_0$.
+    \begin{proof}
+        \[f(x) - f(x_0) = f(x) - f(x_0) - \vec{b} \cdot (x-x_0) + \vec{b} \cdot (x - x_0)\]
+        \[=\frac{f(x) - f(x_0) - \vec{b}\cdot (x-x_0)}{\norm{x-x_0}}\norm{x - x_0} + \vec{b} \cdot (x - x_0) \]
+        \[\leq \norm{\frac{f(x) - f(x_0) - \vec{b}\cdot (x-x_0)}{\norm{x-x_0}}}\norm{x-x_0} + \norm{b}\norm{x - x_0}\]
+        \[\implies \lim_{x \ra x_0} | f(x) - f(x_0)| \leq 0 = 0\]
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}
+    $E \subset \R^n$, $f: E \ra \R$, $x_0 \in E^\circ$. If $f$ is differentiable at $x_0$, then 
+    \begin{enumerate}[label = \roman*)]
+        \item There exists $\frac{\partial f}{\partial v}(x_0)$ for all $v \in \R^n$, $\norm{v} = 1$ and $\frac{\partial f}{\partial v}(x_0) = df(x_0)v$.
+        \item For all $v \in \R^n$, $\norm{v} = 1$, 
+        \[\frac{\partial f}{\partial v}(x_0) = \sum_{i}^{n}\frac{\partial f}{\partial x_i}(x_0)v_i\]
+        In other words,
+        \[\frac{\partial f}{\partial v}(x_0) = \nabla f(x_0)\cdot v. \]
+        \begin{proof}
+            $x_0 \in E^\circ \implies \exists r > 0, B(x_0,r) \subset E$. Take $v \in \R^n$, $\norm{v} = 1, x = x_0 + tv$. Then
+            \[\norm{x - x_0} = \norm{x_0 + tv - x_0} = t\norm{v} = t\]
+            If we choose $t < r$, then $x \in B(x_0,r) \subset E$. (To be continued...)
+        \end{proof}
+    \end{enumerate}
+
+\end{theorem}
 
 \end{document}
