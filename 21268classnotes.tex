@@ -637,13 +637,59 @@ Recall on that on $\R$, if $f$ is differentiable at $x_0$, then $f$ is continuou
         \[\frac{\partial f}{\partial v}(x_0) = \sum_{i}^{n}\frac{\partial f}{\partial x_i}(x_0)v_i\]
         In other words,
         \[\frac{\partial f}{\partial v}(x_0) = \nabla f(x_0)\cdot v. \]
-        \begin{proof}
-            $x_0 \in E^\circ \implies \exists r > 0, B(x_0,r) \subset E$. Take $v \in \R^n$, $\norm{v} = 1, x = x_0 + tv$. Then
-            \[\norm{x - x_0} = \norm{x_0 + tv - x_0} = t\norm{v} = t\]
-            If we choose $t < r$, then $x \in B(x_0,r) \subset E$. (To be continued...)
-        \end{proof}
     \end{enumerate}
+        A consequence of this theorem is that $\vec{b} = (\frac{\partial f}{\partial x_1} (x_0), ..., \frac{\partial f }{\partial x_n} (x_0))$. This is because $b_i =\vec{b} \cdot \vec{e_i} = \frac{\partial f}{\partial e_i}(x_0) = \frac{\partial f}{\partial x_i}(x_0)$. \vspace{3mm}
+        \hrule
+        \begin{proof}
+            $x_0 \in E^\circ \implies \exists r > 0$ such that $B(x_0,r) \subset E$. Take $v \in \R^n$, $\norm{v} = 1, x = x_0 + tv$. Then
+            \[\norm{x - x_0} = \norm{x_0 + tv - x_0} = t\norm{v} = t\]
+            If we choose $t < r$, then $x \in B(x_0,r) \subset E$. This implies that you can compute $f(x_0 + tv)$ for such $t$ and $v$. Now we test the definition of differentiability with $x = x_0 + tv$. Thus
+            \[0 = \lim_{x \ra x_0 \ (x = x_0 + tv)} \frac{f(x) - f(x_0) - b \cdot (x - x_0)}{\norm{x - x_0}}\]
+            \[ = \lim_{t \ra 0} \frac{f(x_0 + tv) - f(x_0) - b \cdot tv}{|t| \norm{v}}\]
+            Multiply by $\norm{v} > 0$.
+            \[0 = \lim_{t \ra 0} \frac{f(x_0 + tv) - f(x_0) - b \cdot tv}{|t|}\]
+            Then,
+            \[0 = \lim_{t \ra 0} \left| \frac{f(x_0 + tv) - f(x_0) - b \cdot tv}{|t|}\right|\]
+            \[= \lim_{t \ra 0} \left| \frac{f(x_0 + tv) - f(x_0) - b \cdot tv}{|t|} - 0\right|\]
+            So,
+            \[\lim_{t \ra 0} \frac{f(x_0 + tv) - f(x_0) - b \cdot tv}{t} = 0.\]
+            Rearranging on the LHS,
+            \[\lim_{t \ra 0} \frac{f(x_0 + tv) - f(x_0)}{t} - b \cdot v = 0.\]
+            And thus,
+            \[\lim_{t \ra 0} \frac{f(x_0 + tv) - f(x_0)}{t} = b \cdot v\]
+            which is precisely the definition of the directional derivative in direction $v$ at $x_0$. So, \[\frac{\partial f}{\partial v}(x_0) = b \cdot v.\]
+        \end{proof}
+    \end{theorem}
+        
 
-\end{theorem}
+    \begin{definition}
+        If $\frac{\partial f}{\partial x_i}(x_0)$ exists for each $1 \leq i \leq n$, we call \[(\frac{\partial f}{\partial x_1} (x_0), ..., \frac{\partial f }{\partial x_n} (x_0)) = \nabla f(x_0) = \text{grad} \ f(x_0)\]
+        the gradient of $f$ at $x_0$. 
+    \end{definition}
+    \newpage
+    \begin{remark}[Proving or disproving differentiability at $x_0$]
+        If we want to prove that something is differentiable and $f$ is indeed differentiable at $x_0$, then $b = \nabla f(x_0$) by the above theorem. In particular, to check differentiability of $f$ at $x_0$, it suffices to verify that 
+        \[= \lim_{x_0 \ra x}\frac{f(x) - f(x_0) - \nabla f(x_0) \cdot (x - x_0)}{\norm{x - x_0}}.\]
 
+        We can disprove differentiability in a few ways. 
+        \begin{enumerate}[label = \roman*)]
+            \item Show $f$ is not continuous at $x_0$ (Since differentiability implies continuity). 
+            \item if $x_0 \in E^\circ$ and $\frac{\partial f}{\partial v}(x_0)$ doesn't exist for any $v$, then $f$ is not differentiable at $x_0$. 
+            \item if $x_0 \in E^\circ$ and \[\frac{\partial f}{\partial v}(x_0) \neq \nabla f(x_0) \cdot v\]
+            for some $v \neq 0$, then $f$ is not differentiable at $x_0$. 
+        \end{enumerate}
+    \end{remark}
+
+    \begin{example}
+        \[f(x,y) = 
+    \begin{cases}
+        \frac{x^2y}{x^4 + y^2} & \text{if} \ (x,y) \neq (0,0) \\
+        0 & \text{if} \ (x,y) = (0,0)
+    \end{cases}
+    \]
+    \[\frac{\partial f}{\partial v}(0,0) = \frac{v_1^2}{v_2}\]
+    for $v_2 \neq 0$. This expression, if $f$ were differentiable at $(0,0)$, should be of the form
+    \[\frac{\partial f}{\partial v}(0,0) = \frac{\partial f}{\partial x_1}(0,0)v_1 + \frac{\partial f}{\partial x_2}(0,0)v_2\]
+    so $f$ is not differentiable at the origin. The key here is that $\frac{v_1^2}{v_2}$ is not linear. 
+    \end{example}
 \end{document}
